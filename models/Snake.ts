@@ -19,6 +19,10 @@ export class Snake {
     return this.#body[0];
   }
 
+  get direction() {
+    return this.#direction;
+  }
+
   set direction(direction: Direction) {
     const { x, y } = this.head.coordinates;
     if (
@@ -47,23 +51,22 @@ export class Snake {
     return this.#body[index];
   }
 
-  check(maxX = 20, maxY = 20) {
-    const found = {};
-    return this.#body.reduce((gameOver, segment) => {
-      if (gameOver) return gameOver;
-      const { x, y } = segment.coordinates;
-
-      if (x > maxX || x < 1 || y > maxY || y < 1) return true;
-
-      if (found[x] && found[x][y]) return true;
-
-      if (!found[x]) {
-        found[x] = {};
-      }
-
-      found[x][y] = true;
-      return false;
-    }, false);
+  check(maxDim: number) {
+    const { x, y } = this.head.coordinates;
+    return (
+      x < 1 ||
+      y < 1 ||
+      x > maxDim ||
+      y > maxDim ||
+      this.#body
+        .filter((segment) => segment !== this.head)
+        .reduce(
+          (gameOver: boolean, segment) =>
+            gameOver ||
+            this.head.isAt(segment.coordinates.x, segment.coordinates.y),
+          false
+        )
+    );
   }
 
   hasSegmentAt(x: number, y: number) {
