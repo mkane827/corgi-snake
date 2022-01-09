@@ -92,9 +92,15 @@ export function Board() {
       <table>
         <tbody>
           {DIMS.map((y) => (
-            <tr>
+            <tr key={y}>
               {DIMS.map((x) => (
-                <Cell x={x} y={y} snake={snake.current} snacko={snacko} />
+                <Cell
+                  key={x}
+                  x={x}
+                  y={y}
+                  snake={snake.current}
+                  snacko={snacko}
+                />
               ))}
             </tr>
           ))}
