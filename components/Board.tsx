@@ -5,9 +5,10 @@ import { Snacko } from "../models/Snacko";
 import { Snake } from "../models/Snake";
 import { Cell } from "./Cell";
 import { PlayButton } from "./PlayButton";
+import { SpeedSelector } from "./SpeedSelector";
 
 const MAX_DIM = 20;
-const TICK_SPEED = 200;
+const TICK_SPEED = 100;
 
 const DIMS = [];
 for (let i = 1; i <= MAX_DIM; i++) {
@@ -17,6 +18,7 @@ for (let i = 1; i <= MAX_DIM; i++) {
 export function Board() {
   const snake = useRef(new Snake());
   const [tick, setTick] = useState(0);
+  const [speed, setSpeed] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [snacko, setSnacko] = useState(new Snacko(MAX_DIM));
   const [score, setScore] = useState(0);
@@ -28,7 +30,7 @@ export function Board() {
   const [queuedDirection, setQueuedDirection] = useState<Direction>();
 
   useInterval(() => {
-    if (isPlaying) {
+    if (isPlaying && tick % speed === 0) {
       snake.current.move();
       setHasDirectionChangedSinceLastMove(false);
 
@@ -97,6 +99,7 @@ export function Board() {
         🏆 {score}{" "}
         <span className="game-over">{isGameOver ? "GAME OVER" : ""}</span>
       </h1>
+      {/* <SpeedSelector speed={speed} setSpeed={setSpeed} /> */}
       <table>
         <tbody>
           {DIMS.map((y) => (
