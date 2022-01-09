@@ -2,8 +2,9 @@
   "private": "true",
   "source": "./index.html",
   "scripts": {
-    "start": "parcel",
-    "build": "rm -r dist; parcel build --public-url './'"
+    "clean": "rm -r dist; rm -r .parcel-cache;",
+    "start": "npm run clean; parcel",
+    "build": "npm run clean; parcel build --public-url './'"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.1",
