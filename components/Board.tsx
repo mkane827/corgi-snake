@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import useInterval from "react-useinterval";
-import corgi from "../assets/corgi.png";
 import { Direction } from "../enums/Direction";
 import { Snacko } from "../models/Snacko";
 import { Snake } from "../models/Snake";
+import { Cell } from "./Cell";
 import { PlayButton } from "./PlayButton";
 
 const MAX_DIM = 20;
@@ -39,39 +39,6 @@ export function Board() {
     }
   }, TICK_SPEED);
 
-  function getDirectionClass(direction) {
-    switch (direction) {
-      case Direction.UP:
-        return "up";
-      case Direction.DOWN:
-        return "down";
-      case Direction.LEFT:
-        return "left";
-      case Direction.RIGHT:
-        return "right";
-      default:
-        return "wat";
-    }
-  }
-
-  function getCellClasses(x: number, y: number) {
-    if (snake.current.hasSegmentAt(x, y)) {
-      return `snake ${
-        snake.current.isHeadAt(x, y)
-          ? `head ${getDirectionClass(snake.current.direction)}`
-          : ""
-      } ${
-        snake.current.isButtAt(x, y)
-          ? `butt ${getDirectionClass(snake.current.buttDirection)}`
-          : ""
-      }`;
-    }
-
-    if (snacko.isAt(x, y)) {
-      return "snacko";
-    }
-  }
-
   function handleKeyPress(e: React.KeyboardEvent) {
     e.preventDefault();
     switch (e.code) {
@@ -90,13 +57,6 @@ export function Board() {
     }
   }
 
-  function getCellContent(x: number, y: number) {
-    if (snake.current.head.isAt(x, y)) {
-      return <img src={corgi} />;
-    }
-    return <span>{snacko.forCoordinates(x, y)}</span>;
-  }
-
   return (
     <div>
       <PlayButton
@@ -111,11 +71,9 @@ export function Board() {
       <table>
         <tbody>
           {DIMS.map((y) => (
-            <tr key={y}>
+            <tr>
               {DIMS.map((x) => (
-                <td key={x} className={getCellClasses(x, y)}>
-                  {getCellContent(x, y)}
-                </td>
+                <Cell x={x} y={y} snake={snake.current} snacko={snacko} />
               ))}
             </tr>
           ))}

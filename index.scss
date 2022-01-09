@@ -61,7 +61,7 @@ table {
         img {
           height: 90%;
           width: 90%;
-          transition: all;
+          transition: transform;
         }
 
         &.up {
@@ -131,15 +131,19 @@ table {
     }
 
     &:nth-child(even) {
-      background: #7dcea0;
-
       td:not(.snake):nth-child(even) {
         background: #d4efdf;
+      }
+
+      td:not(.snake):nth-child(odd) {
+        background: #7dcea0;
       }
     }
 
     &:nth-child(odd) {
-      background: #7dcea0;
+      td:not(.snake):nth-child(even) {
+        background: #7dcea0;
+      }
 
       td:not(.snake):nth-child(odd) {
         background: #d4efdf;
