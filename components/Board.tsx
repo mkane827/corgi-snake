@@ -86,7 +86,7 @@ export function Board() {
         isPlaying={isPlaying}
       />
       <h1>
-        {score}{" "}
+        🏆 {score}{" "}
         <span className="game-over">{isGameOver ? "GAME OVER" : ""}</span>
       </h1>
       <table>

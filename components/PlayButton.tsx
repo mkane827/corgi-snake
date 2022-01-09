@@ -1,10 +1,17 @@
-import play from "../assets/play.png";
-
 export function PlayButton({ handleKeyPress, isPlaying, setIsPlaying }) {
   return (
     <div className={`start-game ${isPlaying ? "playing" : ""}`}>
-      <img src={play} />
-      <span>{isPlaying ? "Playing" : "play"}</span>
+      {isPlaying ? (
+        <span>
+          <span className="play-button-icon">⏸️</span>
+          <span>Playing</span>
+        </span>
+      ) : (
+        <span>
+          <span className="play-button-icon">▶️</span>
+          <span>play</span>
+        </span>
+      )}
       <input
         type="button"
         onKeyDown={handleKeyPress}

@@ -4,7 +4,7 @@ body {
 
 .start-game {
   height: 30px;
-  width: 120px;
+  width: 140px;
   border-radius: 14px;
   padding: 8px;
   background: #3aae84;
@@ -19,8 +19,9 @@ body {
     background: #f63f3a;
   }
 
-  img {
-    height: 100%;
+  .play-button-icon {
+    margin-right: 21px;
+    margin-left: 7px;
   }
 
   input {
@@ -67,48 +68,68 @@ table {
         &.up {
           &.head {
             border-radius: 50% 50% 0 0;
+
+            img {
+              transform: rotate(180deg);
+            }
           }
           &.butt {
             border-radius: 0 0 50% 50%;
-          }
-          img {
-            transform: rotate(180deg);
+
+            img {
+              transform: rotate(0deg);
+            }
           }
         }
 
         &.down {
           &.head {
             border-radius: 0 0 50% 50%;
+
+            img {
+              transform: rotate(0deg);
+            }
           }
           &.butt {
             border-radius: 50% 50% 0 0;
-          }
-          img {
-            transform: rotate(0deg);
+
+            img {
+              transform: rotate(180deg);
+            }
           }
         }
 
         &.left {
           &.head {
             border-radius: 50% 0 0 50%;
+
+            img {
+              transform: rotate(90deg);
+            }
           }
           &.butt {
             border-radius: 0 50% 50% 0;
-          }
-          img {
-            transform: rotate(90deg);
+
+            img {
+              transform: rotate(270deg);
+            }
           }
         }
 
         &.right {
           &.head {
             border-radius: 0 50% 50% 0;
+
+            img {
+              transform: rotate(270deg);
+            }
           }
           &.butt {
             border-radius: 50% 0 0 50%;
-          }
-          img {
-            transform: rotate(270deg);
+
+            img {
+              transform: rotate(90deg);
+            }
           }
         }
       }

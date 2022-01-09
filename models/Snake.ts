@@ -4,6 +4,7 @@ import { Segment } from "./Segment";
 export class Snake {
   #body: Segment[];
   #direction: Direction;
+  #corgiIndex: number;
 
   constructor() {
     this.#body = [
@@ -13,6 +14,11 @@ export class Snake {
       new Segment(10, 13),
     ];
     this.#direction = Direction.UP;
+    this.#corgiIndex = Math.floor((Math.random() * 1000) % 6);
+  }
+
+  get corgiIndex() {
+    return this.#corgiIndex;
   }
 
   get head() {
