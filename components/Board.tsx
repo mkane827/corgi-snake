@@ -4,9 +4,10 @@ import corgi from "../assets/corgi.png";
 import { Direction } from "../enums/Direction";
 import { Snacko } from "../models/Snacko";
 import { Snake } from "../models/Snake";
+import { PlayButton } from "./PlayButton";
 
 const MAX_DIM = 20;
-const TICK_SPEED = 300;
+const TICK_SPEED = 200;
 
 const DIMS = [];
 for (let i = 1; i <= MAX_DIM; i++) {
@@ -38,9 +39,8 @@ export function Board() {
     }
   }, TICK_SPEED);
 
-  function getDirectionClass() {
-    console.log(snake.current.direction);
-    switch (snake.current.direction) {
+  function getDirectionClass(direction) {
+    switch (direction) {
       case Direction.UP:
         return "up";
       case Direction.DOWN:
@@ -56,7 +56,15 @@ export function Board() {
 
   function getCellClasses(x: number, y: number) {
     if (snake.current.hasSegmentAt(x, y)) {
-      return `snake ${getDirectionClass()}`;
+      return `snake ${
+        snake.current.isHeadAt(x, y)
+          ? `head ${getDirectionClass(snake.current.direction)}`
+          : ""
+      } ${
+        snake.current.isButtAt(x, y)
+          ? `butt ${getDirectionClass(snake.current.buttDirection)}`
+          : ""
+      }`;
     }
 
     if (snacko.isAt(x, y)) {
@@ -65,6 +73,7 @@ export function Board() {
   }
 
   function handleKeyPress(e: React.KeyboardEvent) {
+    e.preventDefault();
     switch (e.code) {
       case "ArrowUp":
         snake.current.direction = Direction.UP;
@@ -82,20 +91,18 @@ export function Board() {
   }
 
   function getCellContent(x: number, y: number) {
-    // if (snake.current.head.isAt(x, y)) {
-    //   return <img src={corgi} />;
-    // }
+    if (snake.current.head.isAt(x, y)) {
+      return <img src={corgi} />;
+    }
     return <span>{snacko.forCoordinates(x, y)}</span>;
   }
 
   return (
     <div>
-      <input
-        type="button"
-        onKeyDown={handleKeyPress}
-        className="start-game"
-        onFocus={() => setIsPlaying(true)}
-        onBlur={() => setIsPlaying(false)}
+      <PlayButton
+        handleKeyPress={handleKeyPress}
+        setIsPlaying={setIsPlaying}
+        isPlaying={isPlaying}
       />
       <h1>
         {score}{" "}

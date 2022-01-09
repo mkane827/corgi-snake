@@ -3,7 +3,7 @@
   "source": "./index.html",
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "rm -r dist; parcel build --public-url './'"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.1",

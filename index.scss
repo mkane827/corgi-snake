@@ -1,19 +1,46 @@
 body {
-  font-family: sans-serif;
+  font-family: "Oxygen", sans-serif;
 }
 
 .start-game {
   height: 30px;
-  width: 100px;
-  background: red;
+  width: 120px;
+  border-radius: 14px;
+  padding: 8px;
+  background: #3aae84;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  text-transform: uppercase;
 
-  &:focus {
-    background: green;
+  &.playing {
+    background: #f63f3a;
+  }
+
+  img {
+    height: 100%;
+  }
+
+  input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
   }
 }
 
 .game-over {
   color: #ed5565;
+}
+
+.snacko-wrapper {
+  postion: relative;
 }
 
 table {
@@ -37,28 +64,69 @@ table {
           transition: all;
         }
 
-        &.up img {
-          transform: rotate(180deg);
+        &.up {
+          &.head {
+            border-radius: 50% 50% 0 0;
+          }
+          &.butt {
+            border-radius: 0 0 50% 50%;
+          }
+          img {
+            transform: rotate(180deg);
+          }
         }
 
-        &.down img {
-          transform: rotate(0deg);
+        &.down {
+          &.head {
+            border-radius: 0 0 50% 50%;
+          }
+          &.butt {
+            border-radius: 50% 50% 0 0;
+          }
+          img {
+            transform: rotate(0deg);
+          }
         }
 
-        &.left img {
-          transform: rotate(90deg);
+        &.left {
+          &.head {
+            border-radius: 50% 0 0 50%;
+          }
+          &.butt {
+            border-radius: 0 50% 50% 0;
+          }
+          img {
+            transform: rotate(90deg);
+          }
         }
 
-        &.right img {
-          transform: rotate(270deg);
+        &.right {
+          &.head {
+            border-radius: 0 50% 50% 0;
+          }
+          &.butt {
+            border-radius: 50% 0 0 50%;
+          }
+          img {
+            transform: rotate(270deg);
+          }
         }
       }
 
       &.snacko {
-        overflow: visible;
-        animation-name: pulsate;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
+        position: relative;
+
+        span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          overflow: visible;
+          animation-name: pulsate;
+          animation-duration: 1.5s;
+          animation-iteration-count: infinite;
+        }
       }
     }
 
@@ -82,14 +150,18 @@ table {
 
 @keyframes pulsate {
   0% {
-    font-size: 13px;
+    font-size: 22px;
   }
 
   50% {
-    font-size: 11px;
+    font-size: 25px;
+    top: -3px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
   }
 
   100% {
-    font-size: 13px;
+    font-size: 22px;
   }
 }

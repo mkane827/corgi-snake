@@ -19,6 +19,10 @@ export class Snake {
     return this.#body[0];
   }
 
+  get butt() {
+    return this.#body[this.length - 1];
+  }
+
   get direction() {
     return this.#direction;
   }
@@ -34,6 +38,15 @@ export class Snake {
       return;
     }
     this.#direction = direction;
+  }
+
+  get buttDirection() {
+    const { x: buttX, y: buttY } = this.butt.coordinates;
+    const { x: hipX, y: hipY } = this.#body[this.length - 2].coordinates;
+    if (buttX < hipX) return Direction.RIGHT;
+    if (buttX > hipX) return Direction.LEFT;
+    if (buttY < hipY) return Direction.DOWN;
+    return Direction.UP;
   }
 
   get length() {
@@ -80,5 +93,13 @@ export class Snake {
     const { x: x1, y: y1 } = this.#body[this.length - 1].coordinates;
     const { x: x2, y: y2 } = this.#body[this.length - 2].coordinates;
     this.#body.push(new Segment(2 * x1 - x2, 2 * y1 - y2));
+  }
+
+  isHeadAt(x: number, y: number) {
+    return this.head.isAt(x, y);
+  }
+
+  isButtAt(x: number, y: number) {
+    return this.butt.isAt(x, y);
   }
 }
