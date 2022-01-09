@@ -21,10 +21,22 @@ export function Board() {
   const [snacko, setSnacko] = useState(new Snacko(MAX_DIM));
   const [score, setScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [
+    hasDirectionChangedSinceLastMove,
+    setHasDirectionChangedSinceLastMove,
+  ] = useState(false);
+  const [queuedDirection, setQueuedDirection] = useState<Direction>();
 
   useInterval(() => {
     if (isPlaying) {
       snake.current.move();
+      setHasDirectionChangedSinceLastMove(false);
+
+      if (queuedDirection) {
+        changeDirection(queuedDirection);
+        setQueuedDirection(null);
+      }
+
       if (snake.current.head.isAt(snacko.x, snacko.y)) {
         setScore(score + 1);
         setSnacko(new Snacko(MAX_DIM));
@@ -39,20 +51,29 @@ export function Board() {
     }
   }, TICK_SPEED);
 
+  function changeDirection(direction: Direction) {
+    if (hasDirectionChangedSinceLastMove) {
+      setQueuedDirection(direction);
+    } else {
+      snake.current.direction = direction;
+      setHasDirectionChangedSinceLastMove(true);
+    }
+  }
+
   function handleKeyPress(e: React.KeyboardEvent) {
     e.preventDefault();
     switch (e.code) {
       case "ArrowUp":
-        snake.current.direction = Direction.UP;
+        changeDirection(Direction.UP);
         break;
       case "ArrowDown":
-        snake.current.direction = Direction.DOWN;
+        changeDirection(Direction.DOWN);
         break;
       case "ArrowLeft":
-        snake.current.direction = Direction.LEFT;
+        changeDirection(Direction.LEFT);
         break;
       case "ArrowRight":
-        snake.current.direction = Direction.RIGHT;
+        changeDirection(Direction.RIGHT);
         break;
     }
   }
