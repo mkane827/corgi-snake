@@ -51,6 +51,12 @@ export function Board() {
     }
   }, TICK_SPEED);
 
+  function restartGame() {
+    snake.current = new Snake();
+    setIsGameOver(false);
+    setScore(0);
+  }
+
   function changeDirection(direction: Direction) {
     if (hasDirectionChangedSinceLastMove) {
       setQueuedDirection(direction);
@@ -84,6 +90,8 @@ export function Board() {
         handleKeyPress={handleKeyPress}
         setIsPlaying={setIsPlaying}
         isPlaying={isPlaying}
+        isGameOver={isGameOver}
+        restartGame={restartGame}
       />
       <h1>
         🏆 {score}{" "}

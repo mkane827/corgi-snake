@@ -3,14 +3,12 @@ body {
 }
 
 .start-game {
+  display: inline-block;
   height: 30px;
-  width: 140px;
   border-radius: 14px;
   padding: 8px;
   background: #3aae84;
   position: relative;
-  display: flex;
-  align-items: center;
   color: white;
   font-size: 20px;
   text-transform: uppercase;
@@ -21,7 +19,6 @@ body {
 
   .play-button-icon {
     margin-right: 21px;
-    margin-left: 7px;
   }
 
   input {
