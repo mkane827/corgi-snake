@@ -13,10 +13,6 @@ export class Segment {
     return { x: this.#x, y: this.#y };
   }
 
-  isAtCoordinates(x: number, y: number) {
-    return this.#x === x && this.#y === y;
-  }
-
   moveTo(segment: Segment) {
     const { x, y } = segment.coordinates;
     this.#x = x;

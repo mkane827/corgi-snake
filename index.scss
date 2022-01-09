@@ -1,28 +1,167 @@
+body {
+  font-family: "Oxygen", sans-serif;
+}
+
 .start-game {
   height: 30px;
-  width: 100px;
-  background: red;
+  width: 120px;
+  border-radius: 14px;
+  padding: 8px;
+  background: #3aae84;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  text-transform: uppercase;
 
-  &:focus {
-    background: green;
+  &.playing {
+    background: #f63f3a;
   }
+
+  img {
+    height: 100%;
+  }
+
+  input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.game-over {
+  color: #ed5565;
+}
+
+.snacko-wrapper {
+  postion: relative;
 }
 
 table {
+  border: solid 4px #5dade2;
   border-collapse: collapse;
+
+  tr {
+    td {
+      height: 22px;
+      width: 22px;
+      font-size: 13px;
+      text-align: center;
+      vertical-align: middle;
+
+      &.snake {
+        background: orange;
+
+        img {
+          height: 90%;
+          width: 90%;
+          transition: all;
+        }
+
+        &.up {
+          &.head {
+            border-radius: 50% 50% 0 0;
+          }
+          &.butt {
+            border-radius: 0 0 50% 50%;
+          }
+          img {
+            transform: rotate(180deg);
+          }
+        }
+
+        &.down {
+          &.head {
+            border-radius: 0 0 50% 50%;
+          }
+          &.butt {
+            border-radius: 50% 50% 0 0;
+          }
+          img {
+            transform: rotate(0deg);
+          }
+        }
+
+        &.left {
+          &.head {
+            border-radius: 50% 0 0 50%;
+          }
+          &.butt {
+            border-radius: 0 50% 50% 0;
+          }
+          img {
+            transform: rotate(90deg);
+          }
+        }
+
+        &.right {
+          &.head {
+            border-radius: 0 50% 50% 0;
+          }
+          &.butt {
+            border-radius: 50% 0 0 50%;
+          }
+          img {
+            transform: rotate(270deg);
+          }
+        }
+      }
+
+      &.snacko {
+        position: relative;
+
+        span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          overflow: visible;
+          animation-name: pulsate;
+          animation-duration: 1.5s;
+          animation-iteration-count: infinite;
+        }
+      }
+    }
+
+    &:nth-child(even) {
+      background: #7dcea0;
+
+      td:not(.snake):nth-child(even) {
+        background: #d4efdf;
+      }
+    }
+
+    &:nth-child(odd) {
+      background: #7dcea0;
+
+      td:not(.snake):nth-child(odd) {
+        background: #d4efdf;
+      }
+    }
+  }
 }
 
-td {
-  border: solid 1px black;
-  height: 20px;
-  width: 20px;
-  background: lightgreen;
-
-  &.snake {
-    background: orange;
+@keyframes pulsate {
+  0% {
+    font-size: 22px;
   }
 
-  &.snacko {
-    background: blue;
+  50% {
+    font-size: 25px;
+    top: -3px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+  }
+
+  100% {
+    font-size: 22px;
   }
 }

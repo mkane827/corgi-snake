@@ -19,6 +19,14 @@ export class Snake {
     return this.#body[0];
   }
 
+  get butt() {
+    return this.#body[this.length - 1];
+  }
+
+  get direction() {
+    return this.#direction;
+  }
+
   set direction(direction: Direction) {
     const { x, y } = this.head.coordinates;
     if (
@@ -30,6 +38,15 @@ export class Snake {
       return;
     }
     this.#direction = direction;
+  }
+
+  get buttDirection() {
+    const { x: buttX, y: buttY } = this.butt.coordinates;
+    const { x: hipX, y: hipY } = this.#body[this.length - 2].coordinates;
+    if (buttX < hipX) return Direction.RIGHT;
+    if (buttX > hipX) return Direction.LEFT;
+    if (buttY < hipY) return Direction.DOWN;
+    return Direction.UP;
   }
 
   get length() {
@@ -47,23 +64,22 @@ export class Snake {
     return this.#body[index];
   }
 
-  check(maxX = 20, maxY = 20) {
-    const found = {};
-    return this.#body.reduce((gameOver, segment) => {
-      if (gameOver) return gameOver;
-      const { x, y } = segment.coordinates;
-
-      if (x > maxX || x < 1 || y > maxY || y < 1) return true;
-
-      if (found[x] && found[x][y]) return true;
-
-      if (!found[x]) {
-        found[x] = {};
-      }
-
-      found[x][y] = true;
-      return false;
-    }, false);
+  check(maxDim: number) {
+    const { x, y } = this.head.coordinates;
+    return (
+      x < 1 ||
+      y < 1 ||
+      x > maxDim ||
+      y > maxDim ||
+      this.#body
+        .filter((segment) => segment !== this.head)
+        .reduce(
+          (gameOver: boolean, segment) =>
+            gameOver ||
+            this.head.isAt(segment.coordinates.x, segment.coordinates.y),
+          false
+        )
+    );
   }
 
   hasSegmentAt(x: number, y: number) {
@@ -77,5 +93,13 @@ export class Snake {
     const { x: x1, y: y1 } = this.#body[this.length - 1].coordinates;
     const { x: x2, y: y2 } = this.#body[this.length - 2].coordinates;
     this.#body.push(new Segment(2 * x1 - x2, 2 * y1 - y2));
+  }
+
+  isHeadAt(x: number, y: number) {
+    return this.head.isAt(x, y);
+  }
+
+  isButtAt(x: number, y: number) {
+    return this.butt.isAt(x, y);
   }
 }
