@@ -97,7 +97,9 @@ export function Board() {
       />
       <h1>
         🏆 {score}{" "}
-        <span className="game-over">{isGameOver ? "GAME OVER" : ""}</span>
+        <span className="game-over">
+          {isGameOver ? "GAME OVER - WOOF WOOF" : ""}
+        </span>
       </h1>
       {/* <SpeedSelector speed={speed} setSpeed={setSpeed} /> */}
       <table>
