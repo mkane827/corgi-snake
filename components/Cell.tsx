@@ -34,7 +34,7 @@ export function Cell({ snake, snacko, x, y }) {
     if (snake.hasSegmentAt(x, y)) {
       return `snake ${
         snake.isHeadAt(x, y) ? `head ${getDirectionClass(snake.direction)}` : ""
-      } ${
+      } ${snake.isShoulderAt(x, y) ? "shoulder" : ""} ${
         snake.isButtAt(x, y)
           ? `butt ${getDirectionClass(snake.buttDirection)}`
           : ""

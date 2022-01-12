@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import useInterval from "react-useinterval";
 import { Direction } from "../enums/Direction";
+import { Speed } from "../enums/Speed";
 import { Snacko } from "../models/Snacko";
 import { Snake } from "../models/Snake";
 import { Cell } from "./Cell";
@@ -18,7 +19,7 @@ for (let i = 1; i <= MAX_DIM; i++) {
 export function Board() {
   const snake = useRef(new Snake());
   const [tick, setTick] = useState(0);
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(Speed.TREATOS);
   const [isPlaying, setIsPlaying] = useState(false);
   const [snacko, setSnacko] = useState(new Snacko(MAX_DIM));
   const [score, setScore] = useState(0);
@@ -87,21 +88,7 @@ export function Board() {
   }
 
   return (
-    <div>
-      <PlayButton
-        handleKeyPress={handleKeyPress}
-        setIsPlaying={setIsPlaying}
-        isPlaying={isPlaying}
-        isGameOver={isGameOver}
-        restartGame={restartGame}
-      />
-      <h1>
-        🏆 {score}{" "}
-        <span className="game-over">
-          {isGameOver ? "GAME OVER - WOOF WOOF" : ""}
-        </span>
-      </h1>
-      {/* <SpeedSelector speed={speed} setSpeed={setSpeed} /> */}
+    <div className="game-screen">
       <table>
         <tbody>
           {DIMS.map((y) => (
@@ -119,6 +106,21 @@ export function Board() {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <PlayButton
+          handleKeyPress={handleKeyPress}
+          setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
+          isGameOver={isGameOver}
+          restartGame={restartGame}
+        />
+        <SpeedSelector speed={speed} setSpeed={setSpeed} />
+        <h1>🏆 {score} </h1>
+        <h2 className="game-over">
+          {isGameOver ? "GAME OVER - WOOF WOOF" : ""}
+        </h2>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Speed } from "../enums/Speed";
 
 export function SpeedSelector({ speed, setSpeed }) {
   function onChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -15,9 +16,9 @@ export function SpeedSelector({ speed, setSpeed }) {
           value={speed}
           onChange={onChange}
         >
-          <option value="5">Snooze</option>
-          <option value="3">Looking for treatos</option>
-          <option value="1">ZOOOOOOMIES!!!</option>
+          <option value={Speed.SNOOZE}>Snooze</option>
+          <option value={Speed.TREATOS}>Looking for treatos</option>
+          <option value={Speed.ZOOMIES}>ZOOOOOOMIES!!!</option>
         </select>
       </label>
     </form>

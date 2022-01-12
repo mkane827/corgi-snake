@@ -25,6 +25,10 @@ export class Snake {
     return this.#body[0];
   }
 
+  get shoulder() {
+    return this.#body[1];
+  }
+
   get butt() {
     return this.#body[this.length - 1];
   }
@@ -107,5 +111,9 @@ export class Snake {
 
   isButtAt(x: number, y: number) {
     return this.butt.isAt(x, y);
+  }
+
+  isShoulderAt(x: number, y: number) {
+    return this.shoulder.isAt(x, y);
   }
 }
