@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Direction } from '$lib/enums/Direction';
 	import { Speed } from '$lib/enums/Speed';
-	import { Snacko } from '$lib/stores/Snacko';
+	import { Snacko } from '$lib/stores/SnackoStore';
 	import { SnakeStore } from '$lib/stores/SnakeStore';
 	import Cell from '$lib/cell/Cell.svelte';
 	import PlayButton from '$lib/PlayButton.svelte';
 	import SpeedSelector from '$lib/SpeedSelector.svelte';
 
 	const MAX_DIM = 20;
-	const TICK_SPEED = 1000;
+	const TICK_SPEED = 100;
 	const DIMS = [];
 	for (let i = 1; i <= MAX_DIM; i++) {
 		DIMS.push(i);
@@ -21,8 +21,11 @@
 	let isGameOver = false;
 	let hasDirectionChangedSinceLastMove = false;
 	let queuedDirection: Direction;
+	let tick = 0;
 
 	setInterval(() => {
+		tick = (tick + 1) % speed;
+		if (tick !== 0) return;
 		if (isPlaying) {
 			snake.move();
 			hasDirectionChangedSinceLastMove = false;
@@ -76,13 +79,11 @@
 		}
 	}
 
-	snake.head.isAt(snacko.x, snacko.y).subscribe((shouldNom) => {
-		if (shouldNom) {
-			score++;
-			snacko = new Snacko(MAX_DIM);
-			snake.nom();
-		}
-	});
+	function nom() {
+		score++;
+		snacko.move();
+		snake.nom();
+	}
 </script>
 
 <svelte:body on:keydown={handleKeyPress} />
@@ -92,7 +93,7 @@
 			{#each DIMS as y}
 				<tr>
 					{#each DIMS as x}
-						<Cell {x} {y} {snake} {snacko} />
+						<Cell {x} {y} {snake} {snacko} {nom} />
 					{/each}
 				</tr>
 			{/each}

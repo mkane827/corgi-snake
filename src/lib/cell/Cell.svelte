@@ -6,6 +6,7 @@
 	export let snacko;
 	export let x;
 	export let y;
+	export let nom;
 
 	let cellClass;
 
@@ -14,9 +15,12 @@
 	$: isShoulder = snake.isShoulderAt(x, y);
 	$: isSnake = snake.hasSegmentAt(x, y);
 	$: isSnacko = snacko.isAt(x, y);
+	$: snackoIcon = snacko.snacko;
 	$: corgiIndex = snake.corgiIndex;
 	$: {
-		if ($isShoulder) {
+		if ($isHead && $isSnacko) {
+			nom();
+		} else if ($isShoulder) {
 			cellClass = 'shoulder';
 		} else if ($isSnake) {
 			cellClass = 'snake';
@@ -32,9 +36,9 @@
 	<HeadCell index={$corgiIndex} direction={snake.direction} />
 {:else if $isButt}
 	<ButtCell index={$corgiIndex} direction={snake.buttDirection} />
-{:else if isSnacko}
+{:else if $isSnacko}
 	<td class="snacko">
-		<span>{snacko.snacko}</span>
+		<span>{$snackoIcon}</span>
 	</td>
 {:else}
 	<td class={cellClass} />
