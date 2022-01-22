@@ -25,7 +25,7 @@ function getRandomSnacko(): string {
 	return SNACKOS[Math.floor((Math.random() * 1000) % SNACKOS.length)];
 }
 
-export class Snacko {
+export class SnackoStore {
 	#maxDim: number;
 	#x: Writable<number>;
 	#y: Writable<number>;

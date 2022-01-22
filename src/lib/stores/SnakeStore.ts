@@ -1,6 +1,14 @@
-import { get, type Readable, type Writable, writable, derived } from 'svelte/store';
+import { get, type Readable, type Writable, writable } from 'svelte/store';
 import { Direction } from '../enums/Direction';
 import { Segment } from './SegmentStore';
+
+function getNewSnakeBody() {
+	return [new Segment(10, 10), new Segment(10, 11), new Segment(10, 12), new Segment(10, 13)];
+}
+
+function getRandomCorgiIndex() {
+	return Math.floor((Math.random() * 1000) % 6);
+}
 
 export class SnakeStore {
 	#body: Writable<Segment[]>;
@@ -8,14 +16,9 @@ export class SnakeStore {
 	#corgiIndex: Writable<number>;
 
 	constructor() {
-		this.#body = writable([
-			new Segment(10, 10),
-			new Segment(10, 11),
-			new Segment(10, 12),
-			new Segment(10, 13)
-		]);
+		this.#body = writable(getNewSnakeBody());
 		this.#direction = writable(Direction.UP);
-		this.#corgiIndex = writable(Math.floor((Math.random() * 1000) % 6));
+		this.#corgiIndex = writable(getRandomCorgiIndex());
 	}
 
 	get corgiIndex(): Writable<number> {
@@ -37,10 +40,10 @@ export class SnakeStore {
 	set direction(direction: Direction) {
 		const { x, y } = get(this.head.coordinates);
 		if (
-			(direction === Direction.DOWN && get(this.hasSegmentAt(x, y + 1))) ||
-			(direction === Direction.UP && get(this.hasSegmentAt(x, y - 1))) ||
-			(direction === Direction.RIGHT && get(this.hasSegmentAt(x + 1, y))) ||
-			(direction === Direction.LEFT && get(this.hasSegmentAt(x - 1, y)))
+			(direction === Direction.DOWN && this.hasSegmentAt(x, y + 1)) ||
+			(direction === Direction.UP && this.hasSegmentAt(x, y - 1)) ||
+			(direction === Direction.RIGHT && this.hasSegmentAt(x + 1, y)) ||
+			(direction === Direction.LEFT && this.hasSegmentAt(x - 1, y))
 		) {
 			return;
 		}
@@ -58,6 +61,10 @@ export class SnakeStore {
 
 	get length(): number {
 		return get(this.#body).length;
+	}
+
+	get body(): Writable<Segment[]> {
+		return this.#body;
 	}
 
 	move(): void {
@@ -88,10 +95,8 @@ export class SnakeStore {
 		);
 	}
 
-	hasSegmentAt(x: number, y: number): Readable<boolean> {
-		return derived(this.#body, (body) =>
-			body.reduce((hit, segment) => hit || get(segment.isAt(x, y)), false)
-		);
+	hasSegmentAt(x: number, y: number): boolean {
+		return get(this.body).reduce((anyAt, segment) => anyAt || get(segment.isAt(x, y)), false);
 	}
 
 	nom(): void {
@@ -100,15 +105,9 @@ export class SnakeStore {
 		this.#body.update((body) => [...body, new Segment(2 * x1 - x2, 2 * y1 - y2)]);
 	}
 
-	isHeadAt(x: number, y: number): Readable<boolean> {
-		return this.head.isAt(x, y);
-	}
-
-	isButtAt(x: number, y: number): Readable<boolean> {
-		return this.butt.isAt(x, y);
-	}
-
-	isShoulderAt(x: number, y: number): Readable<boolean> {
-		return this.shoulder.isAt(x, y);
+	reset(): void {
+		this.#body.set(getNewSnakeBody());
+		this.#direction.set(Direction.UP);
+		this.#corgiIndex.set(getRandomCorgiIndex());
 	}
 }

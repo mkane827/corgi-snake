@@ -17,9 +17,16 @@
 </td>
 
 <style>
+	td {
+		position: relative;
+	}
+
 	img {
-		height: 90%;
-		width: 90%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
 		transition: transform;
 	}
 

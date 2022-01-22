@@ -1,27 +1,34 @@
-<script>
+<script lang="ts">
+	import type { SnackoStore } from '$lib/stores/SnackoStore';
+	import type { SnakeStore } from '$lib/stores/SnakeStore';
+	import { derived } from 'svelte/store';
 	import ButtCell from './ButtCell.svelte';
 	import HeadCell from './HeadCell.svelte';
 
-	export let snake;
-	export let snacko;
-	export let x;
-	export let y;
-	export let nom;
+	export let snake: SnakeStore;
+	export let snacko: SnackoStore;
+	export let x: number;
+	export let y: number;
+	export let nom: () => void;
 
-	let cellClass;
+	let cellClass = '';
 
-	$: isHead = snake.isHeadAt(x, y);
-	$: isButt = snake.isButtAt(x, y);
-	$: isShoulder = snake.isShoulderAt(x, y);
-	$: isSnake = snake.hasSegmentAt(x, y);
+	$: snakeBody = snake.body;
+	$: snakeLength = $snakeBody.length;
+	$: snakeHead = $snakeBody[0];
+	$: snakeButt = $snakeBody[snakeLength - 1];
+	$: isHead = snakeHead.isAt(x, y);
+	$: isButt = snakeButt.isAt(x, y);
+	$: snakeSegmentsAreAt = $snakeBody.map((s) => s.isAt(x, y));
+	$: isSnake = derived(snakeSegmentsAreAt, (values) =>
+		values.reduce((anyAt, s) => anyAt || s, false)
+	);
 	$: isSnacko = snacko.isAt(x, y);
 	$: snackoIcon = snacko.snacko;
 	$: corgiIndex = snake.corgiIndex;
 	$: {
 		if ($isHead && $isSnacko) {
 			nom();
-		} else if ($isShoulder) {
-			cellClass = 'shoulder';
 		} else if ($isSnake) {
 			cellClass = 'snake';
 		} else if ((x + y) % 2 === 0) {
@@ -53,7 +60,6 @@
 		vertical-align: middle;
 	}
 
-	.shoulder,
 	.snake {
 		background: #d4ab72;
 	}
