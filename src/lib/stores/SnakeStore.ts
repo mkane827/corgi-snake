@@ -1,4 +1,4 @@
-import { get, type Readable, type Writable, writable } from 'svelte/store';
+import { get, type Writable, writable } from 'svelte/store';
 import { Direction } from '../enums/Direction';
 import { Segment } from './SegmentStore';
 
