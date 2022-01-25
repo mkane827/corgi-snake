@@ -10,9 +10,10 @@
 
 	export let index;
 	export let direction;
+	export let isEven;
 </script>
 
-<td class={direction}>
+<td class={direction} class:wiggle={isEven}>
 	<img src={BUTTS[index]} alt="fluffy corgo booty" />
 </td>
 
@@ -28,6 +29,10 @@
 		height: 100%;
 		width: 100%;
 		transition: transform;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+		animation-duration: 100ms;
+		animation-direction: alternate;
 	}
 
 	.up {
@@ -35,7 +40,11 @@
 	}
 
 	.up img {
-		transform: rotate(0deg);
+		transform: rotate(10deg);
+	}
+
+	.up.wiggle img {
+		transform: rotate(-10deg);
 	}
 
 	.down {
@@ -43,15 +52,23 @@
 	}
 
 	.down img {
-		transform: rotate(180deg);
+		transform: rotate(170deg);
 	}
 
-	.righ {
+	.down.wiggle img {
+		transform: rotate(190deg);
+	}
+
+	.right {
 		border-radius: 50% 0 0 50%;
 	}
 
-	.righ img {
-		transform: rotate(90deg);
+	.right img {
+		transform: rotate(80deg);
+	}
+
+	.right.wiggle img {
+		transform: rotate(100deg);
 	}
 
 	.left {
@@ -59,6 +76,10 @@
 	}
 
 	.left img {
-		transform: rotate(270deg);
+		transform: rotate(260deg);
+	}
+
+	.left.wiggle img {
+		transform: rotate(280deg);
 	}
 </style>

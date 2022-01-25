@@ -20,6 +20,7 @@
 	$: isHead = snakeHead.isAt(x, y);
 	$: isButt = snakeButt.isAt(x, y);
 	$: snakeSegmentsAreAt = $snakeBody.map((s) => s.isAt(x, y));
+	$: isEven = (x + y) % 2 === 0;
 	$: isSnake = derived(snakeSegmentsAreAt, (values) =>
 		values.reduce((anyAt, s) => anyAt || s, false)
 	);
@@ -31,7 +32,7 @@
 			nom();
 		} else if ($isSnake) {
 			cellClass = 'snake';
-		} else if ((x + y) % 2 === 0) {
+		} else if (isEven) {
 			cellClass = 'even';
 		} else {
 			cellClass = 'odd';
@@ -42,7 +43,7 @@
 {#if $isHead}
 	<HeadCell index={$corgiIndex} direction={snake.direction} />
 {:else if $isButt}
-	<ButtCell index={$corgiIndex} direction={snake.buttDirection} />
+	<ButtCell index={$corgiIndex} direction={snake.buttDirection} {isEven} />
 {:else if $isSnacko}
 	<td class="snacko">
 		<span>{$snackoIcon}</span>
