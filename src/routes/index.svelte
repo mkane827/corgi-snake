@@ -108,17 +108,22 @@
 
 <svelte:window on:keydown={handleKeyPress} on:blur={() => (isPlaying = false)} />
 <div class="game-screen">
-	<table>
-		<tbody>
-			{#each DIMS as y}
-				<tr>
-					{#each DIMS as x}
-						<Cell {x} {y} {snake} {snacko} {nom} />
-					{/each}
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	<div class="board">
+		{#if showHighScoreDialog}
+			<NewHighScore {score} {hasSubmittedNewHighScore} />
+		{/if}
+		<table>
+			<tbody>
+				{#each DIMS as y}
+					<tr>
+						{#each DIMS as x}
+							<Cell {x} {y} {snake} {snacko} {nom} />
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 
 	<div>
 		<PlayButton {isPlaying} onClick={handlePlayButton} />
@@ -137,21 +142,20 @@
 			{/each}
 		</ol>
 	</div>
-
-	{#if showHighScoreDialog}
-		<NewHighScore {score} {hasSubmittedNewHighScore} />
-	{/if}
 </div>
 
 <style lang="scss">
 	.game-screen {
 		display: flex;
-
-		table {
-			flex: 0 0 auto;
-			margin-right: 16px;
-		}
 	}
+
+	.board {
+		flex: 0 0 auto;
+		margin-right: 16px;
+		position: relative;
+		z-index: 1;
+	}
+
 	table {
 		border: solid 4px #5dade2;
 		border-collapse: collapse;
