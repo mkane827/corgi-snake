@@ -7,6 +7,9 @@
 	import PlayButton from '$lib/PlayButton.svelte';
 	import SpeedSelector from '$lib/SpeedSelector.svelte';
 	import { get, writable } from 'svelte/store';
+	import { getHighScores } from '$lib/db/scores';
+	import NewHighScore from '$lib/NewHighScore.svelte';
+	import { onMount } from 'svelte';
 
 	const MAX_DIM = 20;
 	const TICK_SPEED = 100;
@@ -14,16 +17,32 @@
 	for (let i = 1; i <= MAX_DIM; i++) {
 		DIMS.push(i);
 	}
+	const CODE_TO_DIRECTION = {
+		ArrowUp: Direction.UP,
+		ArrowDown: Direction.DOWN,
+		ArrowLeft: Direction.LEFT,
+		ArrowRight: Direction.RIGHT
+	};
+
 	let snake = new SnakeStore();
 	let speed = Speed.TREATOS;
 	let isPlaying = false;
 	let snacko = new SnackoStore(MAX_DIM);
 	let score = 0;
+	let highScores = writable([]);
 	let isGameOver = writable(false);
 	let isFirstGame = true;
+	let hasSubmittedNewHighScore = writable(false);
 	let hasDirectionChangedSinceLastMove = false;
 	let queuedDirection: Direction;
 	let tick = 0;
+
+	onMount(() => {
+		getHighScores().then(highScores.set);
+		hasSubmittedNewHighScore.subscribe(() => {
+			getHighScores().then(highScores.set);
+		});
+	});
 
 	setInterval(() => {
 		tick = (tick + 1) % speed;
@@ -49,6 +68,7 @@
 		if (get(isGameOver)) {
 			snake.reset();
 			isGameOver.set(false);
+			hasSubmittedNewHighScore.set(false);
 			score = 0;
 		}
 		isPlaying = !isPlaying;
@@ -64,24 +84,11 @@
 	}
 
 	function handleKeyPress(e: KeyboardEvent) {
-		e.preventDefault();
-		switch (e.code) {
-			case 'ArrowUp':
-				isPlaying = true;
-				changeDirection(Direction.UP);
-				break;
-			case 'ArrowDown':
-				isPlaying = true;
-				changeDirection(Direction.DOWN);
-				break;
-			case 'ArrowLeft':
-				isPlaying = true;
-				changeDirection(Direction.LEFT);
-				break;
-			case 'ArrowRight':
-				isPlaying = true;
-				changeDirection(Direction.RIGHT);
-				break;
+		const newDirection = CODE_TO_DIRECTION[e.code];
+		if (newDirection) {
+			e.preventDefault();
+			isPlaying = true;
+			changeDirection(newDirection);
 		}
 	}
 
@@ -113,7 +120,20 @@
 		<h2 class="game-over">
 			{$isGameOver ? 'GAME OVER - WOOF WOOF' : ''}
 		</h2>
+		<h2>Leaderboard</h2>
+		<ol>
+			{#each $highScores as score}
+				<li class="high-score">
+					<span class="high-score-name">{score.name}</span>
+					{score.score}
+				</li>
+			{/each}
+		</ol>
 	</div>
+
+	{#if $isGameOver && !$hasSubmittedNewHighScore}
+		<NewHighScore {score} {hasSubmittedNewHighScore} />
+	{/if}
 </div>
 
 <style lang="scss">
@@ -128,6 +148,15 @@
 	table {
 		border: solid 4px #5dade2;
 		border-collapse: collapse;
+	}
+
+	.high-score {
+		font-size: 14px;
+	}
+
+	.high-score-name {
+		text-transform: uppercase;
+		font-weight: bold;
 	}
 
 	@keyframes -global-pulsate {
