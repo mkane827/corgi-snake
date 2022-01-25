@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	import type { Writable } from 'svelte/store';
 
 	import { addScore } from './db/scores';
@@ -6,10 +8,18 @@
 	export let score: number;
 	export let hasSubmittedNewHighScore: Writable<boolean>;
 
-	let name: string;
+	const LAST_USED_INITS_KEY = 'last-used-inits';
+	let inits: string;
+
+	onMount(() => {
+		try {
+			inits = localStorage.getItem(LAST_USED_INITS_KEY);
+		} catch {}
+	});
 
 	function handleSubmit() {
-		addScore(name, score);
+		addScore(inits, score);
+		localStorage.setItem(LAST_USED_INITS_KEY, inits);
 		hasSubmittedNewHighScore.set(true);
 	}
 </script>
@@ -18,14 +28,14 @@
 	<div class="dialog">
 		<h1>Such score! Much points!</h1>
 		<form on:submit|preventDefault={handleSubmit}>
-			<label for="high-score-name">Name</label>
+			<label for="high-score-name">Enter your initials</label>
 			<input
-				id="high-score-name"
-				name="high-score-name"
+				id="high-score-inits"
+				name="high-score-inits"
 				type="text"
 				maxlength="3"
 				minlength="3"
-				bind:value={name}
+				bind:value={inits}
 			/>
 
 			<button type="submit">Bork!</button>

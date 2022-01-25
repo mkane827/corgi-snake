@@ -97,6 +97,13 @@
 		snacko.move();
 		snake.nom();
 	}
+
+	$: showHighScoreDialog =
+		$isGameOver &&
+		!$hasSubmittedNewHighScore &&
+		score > 0 &&
+		$highScores.length > 9 &&
+		score > $highScores[9].score;
 </script>
 
 <svelte:window on:keydown={handleKeyPress} on:blur={() => (isPlaying = false)} />
@@ -131,7 +138,7 @@
 		</ol>
 	</div>
 
-	{#if $isGameOver && !$hasSubmittedNewHighScore}
+	{#if showHighScoreDialog}
 		<NewHighScore {score} {hasSubmittedNewHighScore} />
 	{/if}
 </div>
