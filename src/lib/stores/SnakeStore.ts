@@ -37,6 +37,10 @@ export class SnakeStore {
 		return get(this.#body)[this.length - 1];
 	}
 
+	get direction(): Direction {
+		return get(this.#direction);
+	}
+
 	set direction(direction: Direction) {
 		const { x, y } = get(this.head.coordinates);
 		if (
